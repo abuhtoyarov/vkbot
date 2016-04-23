@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'sinatra'
+
+set :bind, '0.0.0.0'
+set :port, 5100
+
+get "/oauth/callback" do
+  puts params
+  if params[:code]
+    redirect "https://telegram.me/vkservicebot?start=code_#{params[:code]}"
+  else
+    redirect "https://telegram.me/vkservicebot?start=error_#{params[:error]}"
+  end
+end

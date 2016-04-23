@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+
+gem 'telegram-bot-ruby'
+gem 'foreman'
+gem 'sinatra'
+gem 'vkontakte_api'
+gem 'activerecord'
+gem 'i18n'
+gem 'pg'
+gem 'rake'
+gem 'activesupport'
