@@ -56,6 +56,7 @@ def fill_result
           if e.error_code == 14
             bot.logger.info("Need enter captcha ")
             @pm_text, @pm_param = ['Captcha need', '/captcha']
+            user.update(captcha_img: e.captcha_img, captcha_sid: e.captcha_sid)
           end
         end
       end
