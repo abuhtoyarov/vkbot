@@ -27,11 +27,11 @@ class AnswerInlineQuery
     if token.present?
       fill_result
     else
-      @pm_text, @pm_param = ['Sign in to Instagram', '/auth']
+      @pm_text, @pm_param = ['Sign in to VK', '/auth']
     end
   end
 
-  def fill_result
+def fill_result
     result = []
     client
 
@@ -39,23 +39,31 @@ class AnswerInlineQuery
       q = query.split('song ').last
 
       if !q.nil?
-        songs = @vk.audio.search(q: q, count: 10)
-        songs.shift
+        begin
+          songs = @vk.audio.search(q: q, count: 10)
+          songs.shift
 
-        songs.each_with_index do |song, index|
-          result << Telegram::Bot::Types::InlineQueryResultAudio.new(
-            id: index,
-            audio_url: song.url,
-            title: song.title,
-            audio_duration: song.duration
-          )
+          songs.each_with_index do |song, index|
+            result << Telegram::Bot::Types::InlineQueryResultAudio.new(
+              id: index,
+              audio_url: song.url,
+              title: song.title,
+              audio_duration: song.duration
+            )
+          end
+
+        rescue VkontakteApi::Error => e
+          if e.error_code == 14
+            bot.logger.info("Need enter captcha ")
+            @pm_text, @pm_param = ['Captcha need', '/captcha']
+          end
         end
       end
     end
     result
   end
 
-  private
+
 
   def client
     @vk ||= VkontakteApi::Client.new(token)

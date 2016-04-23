@@ -3,7 +3,7 @@
 require 'sinatra'
 
 set :bind, '0.0.0.0'
-set :port, 5100
+set :port, 5200
 
 get "/oauth/callback" do
   puts params

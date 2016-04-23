@@ -11,7 +11,6 @@ class MessageResponder
     @message = options[:message]
     @user = User.find_or_create_by(uid: message.from.id)
     @authorize_url = options[:authorize_url]
-    @callback_url = options[:callback_url]
   end
 
   def respond
@@ -24,6 +23,10 @@ class MessageResponder
     end
 
     on /\/auth$/ do
+      answer_auth
+    end
+
+    on /\/captcha$/ do
       answer_auth
     end
 
@@ -53,6 +56,10 @@ class MessageResponder
     text = I18n.t('greeting_message')
 
     MessageSender.new(bot: bot, chat: message.chat, text: text).send
+  end
+
+  def answer_captcha
+    MessageSender.new(bot: bot, chat: message.chat, text: user.captcha_img).send
   end
 
   def answer_auth

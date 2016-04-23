@@ -13,20 +13,18 @@ config.configure
 bot_token = config.get_bot_token
 client_id = config.get_inst_client_id
 client_secret = config.get_inst_client_secret
-CALLBACK_URL = "http://localhost:5100/oauth/callback"
-
 
 VkontakteApi.configure do |config|
   config.app_id       = client_id
   config.app_secret   = client_secret
-  config.redirect_uri = 'http://localhost:5100/oauth/callback'
+  config.redirect_uri = "http://instabot.me:5200/oauth/callback"
 end
 
 authorize_url = VkontakteApi.authorization_url(scope: [:audio, :photos] ,state: Digest::MD5.hexdigest(rand.to_s))
 
 Telegram::Bot::Client.run(bot_token, logger: Logger.new($stderr)) do |bot|
   bot.listen do |message|
-    options = {bot: bot, message: message, authorize_url: authorize_url, callback_url: CALLBACK_URL}
+    options = {bot: bot, message: message, authorize_url: authorize_url}
     case message
     when Telegram::Bot::Types::Message
 
