@@ -27,7 +27,7 @@ class MessageResponder
     end
 
     on /\/captcha$/ do
-      answer_auth
+      answer_captcha
     end
 
     on /^\/start code_/ do
