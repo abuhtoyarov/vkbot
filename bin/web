@@ -8,8 +8,8 @@ set :port, 5200
 get "/oauth/callback" do
   puts params
   if params[:code]
-    redirect "https://telegram.me/vkservicebot?start=code_#{params[:code]}"
+    redirect "https://telegram.me/vkfinderbot?start=code_#{params[:code]}"
   else
-    redirect "https://telegram.me/vkservicebot?start=error_#{params[:error]}"
+    redirect "https://telegram.me/vkfinderbot?start=error_#{params[:error]}"
   end
 end
