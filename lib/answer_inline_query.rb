@@ -17,9 +17,14 @@ class AnswerInlineQuery
   end
 
   def send
-    bot.api.answer_inline_query(inline_query_id: query_id, results: results,
-                                cache_time: 1, switch_pm_text: @pm_text,
-                                switch_pm_parameter: @pm_param)
+
+    begin
+      bot.api.answer_inline_query(inline_query_id: query_id, results: results,
+                                  cache_time: 1, switch_pm_text: @pm_text,
+                                  switch_pm_parameter: @pm_param)
+    rescue Exception => e
+      bot.logger.info("Send error: #{e}")
+    end
   end
 
   private
