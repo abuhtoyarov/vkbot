@@ -30,9 +30,9 @@ class MessageResponder
       answer_captcha
     end
 
-    on /\/captcha/ do
+    on /^\/setcaptcha/ do
       key = message.text.split(' ').last
-      set_answer_captcha(key)
+      set_captcha(key)
     end
 
     on /^\/start code_/ do
@@ -67,7 +67,7 @@ class MessageResponder
     MessageSender.new(bot: bot, chat: message.chat, text: user.captcha_img).send
   end
 
-  def set_answer_captcha(key)
+  def set_captcha(key)
     begin
       client = VkontakteApi::Client.new(user.token)
       client.users.get(uid: 1, captcha_sid: user.captcha_sid, captcha_key: key)

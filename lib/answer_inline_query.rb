@@ -41,7 +41,7 @@ def fill_result
 
       if !q.nil?
         begin
-          songs = @vk.audio.search(q: q, count: 10)
+          songs = @vk.audio.search(q: q, sort: 2, auto_complete: 1)
           songs.shift
 
           songs.each_with_index do |song, index|
@@ -49,6 +49,7 @@ def fill_result
               id: index,
               audio_url: song.url,
               title: song.title,
+              performer: song.artist,
               audio_duration: song.duration
             )
           end
