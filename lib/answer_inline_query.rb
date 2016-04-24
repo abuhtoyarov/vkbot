@@ -65,15 +65,23 @@ def fill_result
     end
 
     on /^myphotos/ do
-      images = @vk.photos.getAll()
-      images.shift
+      begin
+        images = @vk.photos.getAll()
+        images.shift
 
-      images.each_with_index do |photo, index|
-        result << Telegram::Bot::Types::InlineQueryResultPhoto.new(
-          id: index,
-          photo_url: photo.src_big,
-          thumb_url: photo.src,
-        )
+        images.each_with_index do |photo, index|
+          result << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+            id: index,
+            photo_url: photo.src_big,
+            thumb_url: photo.src,
+          )
+        end
+      rescue VkontakteApi::Error => e
+        if e.error_code == 14
+          bot.logger.info("Captcha needed")
+          @pm_text, @pm_param = ['Captcha needed', '/captcha']
+          user.update(captcha_img: e.captcha_img, captcha_sid: e.captcha_sid)
+        end
       end
     end
 
