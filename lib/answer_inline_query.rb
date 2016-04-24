@@ -63,8 +63,45 @@ def fill_result
         end
       end
     end
+
+    on /^myphotos/ do
+      images = @vk.photos.getAll()
+      images.shift
+
+      images.each_with_index do |photo, index|
+        result << Telegram::Bot::Types::InlineQueryResultPhoto.new(
+          id: index,
+          photo_url: photo.src_big,
+          thumb_url: photo.src,
+        )
+      end
+    end
+
+    on /^myaudio$/ do
+      begin
+        songs = @vk.audio.get()
+        songs.each_with_index do |song, index|
+          result << Telegram::Bot::Types::InlineQueryResultAudio.new(
+            id: index,
+            audio_url: song.url,
+            title: song.title,
+            performer: song.artist,
+            audio_duration: song.duration
+          )
+        end
+
+      rescue VkontakteApi::Error => e
+        if e.error_code == 14
+          bot.logger.info("Captcha needed")
+          @pm_text, @pm_param = ['Captcha needed', '/captcha']
+          user.update(captcha_img: e.captcha_img, captcha_sid: e.captcha_sid)
+        end
+      end
+    end
+
     result
   end
+
 
   def client
     @vk ||= VkontakteApi::Client.new(token)
