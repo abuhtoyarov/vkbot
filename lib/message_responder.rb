@@ -30,6 +30,11 @@ class MessageResponder
       answer_captcha
     end
 
+    on /\/captcha/ do
+      key = message.text.split(' ').last
+      set_answer_captcha(key)
+    end
+
     on /^\/start code_/ do
       answer_get_token(message.text.split('_').last)
     end
@@ -60,6 +65,17 @@ class MessageResponder
 
   def answer_captcha
     MessageSender.new(bot: bot, chat: message.chat, text: user.captcha_img).send
+  end
+
+  def set_answer_captcha(key)
+    begin
+      client = VkontakteApi::Client.new(user.token)
+      client.users.get(uid: 1, captcha_sid: user.captcha_sid, captcha_key: key)
+
+      MessageSender.new(bot: bot, chat: message.chat, text: "Ok").send
+    rescue VkontakteApi::Error => e
+      bot.logger.info(e.to_s)
+    end
   end
 
   def answer_auth

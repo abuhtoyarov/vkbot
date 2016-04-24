@@ -4,6 +4,7 @@ class AnswerInlineQuery
     attr_reader :token
     attr_reader :query
     attr_reader :query_id
+    attr_reader :user
 
   def initialize(id, query, bot, user)
     @query_id = id
@@ -54,8 +55,8 @@ def fill_result
 
         rescue VkontakteApi::Error => e
           if e.error_code == 14
-            bot.logger.info("Need enter captcha ")
-            @pm_text, @pm_param = ['Captcha need', '/captcha']
+            bot.logger.info("Captcha needed")
+            @pm_text, @pm_param = ['Captcha needed', '/captcha']
             user.update(captcha_img: e.captcha_img, captcha_sid: e.captcha_sid)
           end
         end
@@ -63,8 +64,6 @@ def fill_result
     end
     result
   end
-
-
 
   def client
     @vk ||= VkontakteApi::Client.new(token)
