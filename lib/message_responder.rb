@@ -26,6 +26,10 @@ class MessageResponder
       answer_auth
     end
 
+    on /^\/logout$/ do
+      answer_logout
+    end
+
     on /\/captcha$/ do
       answer_captcha
     end
@@ -80,6 +84,14 @@ class MessageResponder
 
   def answer_auth
     MessageSender.new(bot: bot, chat: message.chat, text: @authorize_url).send
+  end
+
+  def answer_logout
+    return unless user
+      user.token = nil
+      if user.save
+        MessageSender.new(bot: bot, chat: message.chat, text: 'ok').send
+      end
   end
 
   def answer_get_token(code)
