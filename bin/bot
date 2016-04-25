@@ -20,7 +20,7 @@ VkontakteApi.configure do |config|
   config.redirect_uri = "http://instabot.me:5200/oauth/callback"
 end
 
-authorize_url = VkontakteApi.authorization_url(scope: [:audio, :photos] ,state: Digest::MD5.hexdigest(rand.to_s))
+authorize_url = VkontakteApi.authorization_url(scope: [:audio, :photos, :offline] ,state: Digest::MD5.hexdigest(rand.to_s))
 
 Telegram::Bot::Client.run(bot_token, logger: Logger.new($stderr)) do |bot|
   bot.listen do |message|

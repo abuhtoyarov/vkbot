@@ -63,12 +63,11 @@ class MessageResponder
 
   def answer_with_greeting_message
     text = I18n.t('greeting_message')
-
-    MessageSender.new(bot: bot, chat: message.chat, text: text).send
+    answer_with_message(text)
   end
 
   def answer_captcha
-    MessageSender.new(bot: bot, chat: message.chat, text: user.captcha_img).send
+    answer_with_message(user.captcha_img)
   end
 
   def set_captcha(key)
@@ -76,21 +75,21 @@ class MessageResponder
       client = VkontakteApi::Client.new(user.token)
       client.users.get(uid: 1, captcha_sid: user.captcha_sid, captcha_key: key)
 
-      MessageSender.new(bot: bot, chat: message.chat, text: "Ok").send
+      answer_with_message('Ok')
     rescue VkontakteApi::Error => e
       bot.logger.info(e.to_s)
     end
   end
 
   def answer_auth
-    MessageSender.new(bot: bot, chat: message.chat, text: @authorize_url).send
+    answer_with_message(@authorize_url)
   end
 
   def answer_logout
     return unless user
       user.token = nil
       if user.save
-        MessageSender.new(bot: bot, chat: message.chat, text: 'ok').send
+        answer_with_message('logout ok')
       end
   end
 
@@ -114,12 +113,10 @@ class MessageResponder
   def answer_with_farewell_message
     text = I18n.t('farewell_message')
 
-    MessageSender.new(bot: bot, chat: message.chat, text: text).send
+    answer_with_message(text)
   end
 
   def answer_with_message(text)
     MessageSender.new(bot: bot, chat: message.chat, text: text).send
   end
-
-
 end
