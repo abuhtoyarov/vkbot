@@ -84,7 +84,8 @@ class MessageResponder
   end
 
   def answer_auth
-    answer_with_message(@authorize_url)
+    text = I18n.t('auth')
+    answer_with_message(text << @authorize_url)
   end
 
   def answer_logout
