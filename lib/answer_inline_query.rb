@@ -69,6 +69,37 @@ def fill_result
       end
     end
 
+    on /^video./ do
+      q = query.split('video ').last
+
+      if !q.nil?
+        begin
+          video = @vk.video.search(q: q, sort: 2)
+          video.shift
+
+          video.each_with_index do |v, index|
+            result << Telegram::Bot::Types::InlineQueryResultVideo.new(
+              id: index,
+              video_url: v.player,
+              mime_type: 'video',
+              thumb_url: v.thumb,
+              title: v.title,
+              video_duration: v.duration,
+              description:  v.description
+            )
+          end
+
+        rescue VkontakteApi::Error => e
+          bot.logger.info("VK Error: #{e.error_code}")
+          if e.error_code == 14
+            bot.logger.info("Captcha needed")
+            @pm_text, @pm_param = ['Captcha needed', '/captcha']
+            user.update(captcha_img: e.captcha_img, captcha_sid: e.captcha_sid)
+          end
+        end
+      end
+    end
+
     on /^myphotos/ do
       begin
         images = @vk.photos.getAll()
