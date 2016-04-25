@@ -12,7 +12,7 @@ class MessageResponder
     @user = User.find_or_create_by(uid: message.from.id)
     @authorize_url = options[:authorize_url]
 
-    @kb = [Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Send audio or photos to freinds.', switch_inline_query: 'song ' )]
+    @kb = [Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Send audio or photos to freinds.', switch_inline_query: 'song red hot chili peppers' )]
   end
 
   def respond
