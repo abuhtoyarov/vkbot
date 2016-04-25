@@ -100,11 +100,11 @@ class MessageResponder
     bot.logger.info("Your code: #{code}")
     begin
     vk = VkontakteApi.authorize(code: code)
-    bot.logger.info("Your token: #{vk}")
+    bot.logger.info("Your token: #{vk.token}")
     user.token = vk.token
     user.save!
 
-    MessageSender.new(bot: bot, chat: message.chat, text: "Hello, #{vk} ", answers: @kb).send
+    MessageSender.new(bot: bot, chat: message.chat, text: "Successfully ", answers: @kb).send
 
     rescue Exception => e
       bot.logger.info("Error #{e}")
