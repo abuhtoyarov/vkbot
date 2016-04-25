@@ -1,3 +1,6 @@
 en:
-  greeting_message: "Hi! Telegram is awesome!"
+  greeting_message: This bot can search for music and photos vk.com. commands @vkfinder song search string'
   farewell_message: "Bye! I'll miss you :("
+
+ru:
+  greeting_message: 'Этот бот может искать музыку и фото в vk.com. Команды @vkfinder song строка поиска'

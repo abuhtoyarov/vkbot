@@ -11,6 +11,8 @@ class MessageResponder
     @message = options[:message]
     @user = User.find_or_create_by(uid: message.from.id)
     @authorize_url = options[:authorize_url]
+
+    @kb = [Telegram::Bot::Types::InlineKeyboardButton.new(text: 'Send audio or photos to freinds.', switch_inline_query: 'song ' )]
   end
 
   def respond
@@ -63,7 +65,7 @@ class MessageResponder
 
   def answer_with_greeting_message
     text = I18n.t('greeting_message')
-    answer_with_message(text)
+    answer_with_message(text, @kb)
   end
 
   def answer_captcha
@@ -101,9 +103,7 @@ class MessageResponder
     user.token = vk.token
     user.save!
 
-    kb = [Telegram::Bot::Types::InlineKeyboardButton.new(text: 'switch inline query', switch_inline_query: 'some text' )]
-
-    MessageSender.new(bot: bot, chat: message.chat, text: "Hello, #{vk} ", answers: kb).send
+    MessageSender.new(bot: bot, chat: message.chat, text: "Hello, #{vk} ", answers: @kb).send
 
     rescue Exception => e
       bot.logger.info("Error #{e}")
@@ -116,7 +116,7 @@ class MessageResponder
     answer_with_message(text)
   end
 
-  def answer_with_message(text)
-    MessageSender.new(bot: bot, chat: message.chat, text: text).send
+  def answer_with_message(text, answer=nil)
+    MessageSender.new(bot: bot, chat: message.chat, text: text, answers: answer).send
   end
 end
