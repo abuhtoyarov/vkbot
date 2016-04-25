@@ -1,4 +1,4 @@
 en:
   greeting_message: This bot can help searching for music and photos vkontakte. Commands <code>@vkfinder song search string</code> can help finding music.
   farewell_message: "Bye! I'll miss you :("
-  auth: 'Open this link to sign in to Vkontakte: <br>'
+  auth: 'Open this link to sign in to Vkontakte: '
