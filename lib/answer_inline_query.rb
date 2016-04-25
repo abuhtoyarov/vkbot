@@ -74,14 +74,14 @@ def fill_result
 
       if !q.nil?
         begin
-          video = @vk.video.search(q: q, sort: 2)
+          video = @vk.video.search(q: q, sort: 2, filters: 'mp4')
           video.shift
 
           video.each_with_index do |v, index|
             result << Telegram::Bot::Types::InlineQueryResultVideo.new(
               id: index,
               video_url: v.player,
-              mime_type: 'video',
+              mime_type: 'video/mp4',
               thumb_url: v.thumb,
               title: v.title,
               video_duration: v.duration,
